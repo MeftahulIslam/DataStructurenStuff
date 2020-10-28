@@ -1,0 +1,97 @@
+#include <iostream>
+#include <new>
+#include<sstream>
+#include <string>
+using namespace std;
+struct GravelSalesList{
+	string client;
+	int QtyOfGravel;
+	string QualityofGravel;
+	GravelSalesList *pNext;
+};
+GravelSalesList *head = nullptr;
+
+void insert(string clientN, int Qty, string Qlty){
+	GravelSalesList* temp = new(nothrow) GravelSalesList();
+	temp->client = clientN;
+	temp->QtyOfGravel = Qty;
+	temp->QualityofGravel = Qlty;
+	temp->pNext = nullptr;
+	if(head == nullptr){
+		head = temp;
+	}
+	else{
+		GravelSalesList *temp1 = head;
+		while(temp1->pNext != nullptr){
+			temp1 = temp1->pNext;
+		}
+		temp1->pNext = temp;
+	}
+}
+void insert_at_beginning(string clientN, int Qty, string Qlty){
+	GravelSalesList *temp = new(nothrow) GravelSalesList();
+	temp->client = clientN;
+	temp->QtyOfGravel = Qty;
+	temp->QualityofGravel = Qlty;
+	temp->pNext = nullptr;
+	if(head == nullptr){
+		head = temp;
+	}
+	else{
+		temp->pNext = head;
+		head = temp;
+	}
+}
+void print(){
+	GravelSalesList *temp;
+	temp = head;
+	while(temp != nullptr){
+		cout << "Client Name: "<< temp->client << "\nQuantity of Gravel: " << temp->QtyOfGravel
+			 << "\nQuality of Gravel: " << temp->QualityofGravel << endl;
+		cout << endl;
+		temp = temp->pNext;
+	}
+}
+void clear_list(){
+	GravelSalesList *temp;
+	while(head != nullptr){
+		temp = head;
+		head = temp->pNext;
+		delete temp;
+	}
+}
+int main(){
+	string clientN, Qlty;
+	int Qty, i = 1;
+	
+	cout << "Please Enter the name of the client no." << i << " (Press Q to quit): ";
+	i++;
+	getline(cin, clientN);
+	while(clientN != "Q"){
+		if(clientN == "q") break;
+		cout << "Please Enter the quantity of the Gravel: ";
+		cin >> Qty;
+		cin.ignore();
+		cout << "Please Enter the quality of the Gravel (small/medium/large): ";
+		getline(cin, Qlty);
+		if(Qlty == "small"){
+			insert_at_beginning(clientN, Qty, Qlty)		;
+		}
+		else{
+			insert(clientN, Qty, Qlty);
+		}
+		cout << endl;
+		cout << "Please Enter the name of the client no." << i <<" (Press Q to quit):";
+		getline(cin, clientN);
+		if(clientN == "q") break;
+		i++;
+	}
+	cout << endl;
+	cout << endl;
+	cout << "----------------------------------------" <<endl;
+	cout << "Now printing all inputted customer data: " << endl;
+	cout << "----------------------------------------" <<endl;
+	cout << endl;
+	print();
+	clear_list();
+}
